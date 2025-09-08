@@ -1,9 +1,40 @@
 [project]
 name = "toolkit"
-version = "0.1.0"
-description = "Add your description here"
+version = "1.0.0"
+description = "A collection of useful system utilities and tools"
 readme = "README.md"
-requires-python = ">=3.13.2"
+requires-python = ">=3.8"
 dependencies = [
-    "textual>=0.45.0"
+    "textual>=0.45.0",
+    "pillow>=9.0.0"
+]
+authors = [
+    {name = "David", email = "david@example.com"}
+]
+keywords = ["utilities", "tools", "screenshots", "images"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.scripts]
+toolkit = "main:main"
+screenshot-org = "tools.screenshot.organizer:main"
+image-reorg = "tools.image.reorganizer:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=22.0.0",
+    "flake8>=5.0.0"
 ]
