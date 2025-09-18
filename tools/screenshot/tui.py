@@ -16,7 +16,7 @@ from textual.widgets import (
 from textual.reactive import reactive
 from textual.worker import get_current_worker
 
-from screenshot_organizer import ScreenshotOrganizer, OperationMode, OrganizeResult
+from .organizer import ScreenshotOrganizer, OperationMode, OrganizeResult
 
 
 class SettingsPanel(Container):
@@ -131,16 +131,17 @@ class ScreenshotOrganizerApp(App):
     TITLE = "Screenshot Organizer"
     
     # Reactive attributes
-    current_mode = reactive(OperationMode.MOVE)
+    current_mode = reactive(OperationMode.OPTIMIZE_MOVE)
     source_dir = reactive(Path.home() / "Desktop")
     target_dir = reactive(Path.home() / "Desktop" / "Screenshots")
     files_found = reactive(0)
     is_processing = reactive(False)
-    
+
     def __init__(self):
         super().__init__()
         self.organizer: Optional[ScreenshotOrganizer] = None
         self.current_files = []
+        self.keep_original = False
         
     def compose(self) -> ComposeResult:
         yield Header()
@@ -240,8 +241,9 @@ class ScreenshotOrganizerApp(App):
     
     @on(Button.Pressed, "#mode-copy")
     def on_mode_copy_pressed(self) -> None:
-        """Switch to copy mode"""
-        self.current_mode = OperationMode.COPY
+        """Switch to keep original mode"""
+        self.current_mode = OperationMode.OPTIMIZE_MOVE
+        self.keep_original = True
         move_btn = self.query_one("#mode-move", Button)
         copy_btn = self.query_one("#mode-copy", Button)
         move_btn.variant = "default"
@@ -311,7 +313,7 @@ class ScreenshotOrganizerApp(App):
         """Update results panel"""
         results_text = self.query_one("#results-text", Static)
         
-        mode_text = "PREVIEW" if preview else ("COPIED" if self.current_mode == OperationMode.COPY else "MOVED")
+        mode_text = "PREVIEW" if preview else ("OPTIMIZED" if hasattr(self, 'keep_original') and self.keep_original else "OPTIMIZED & MOVED")
         
         summary = []
         summary.append(f"Total files: {result.total_files}")
@@ -333,6 +335,10 @@ class ScreenshotOrganizerApp(App):
                     summary.append(f"  ❌ {res.source_path.name}: {res.error_message}")
         
         results_text.update(f"{mode_text} Results:\n\n" + "\n".join(summary))
+
+
+# Alias for backward compatibility
+ScreenshotTUI = ScreenshotOrganizerApp
 
 
 def main():

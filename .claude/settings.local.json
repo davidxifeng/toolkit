@@ -5,7 +5,11 @@
       "Bash(mkdir:*)",
       "Bash(chmod:*)",
       "Bash(python:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(imageoptim:*)",
+      "Bash(pngquant:*)",
+      "Bash(cp:*)",
+      "Bash(uv run:*)"
     ],
     "deny": [],
     "ask": []

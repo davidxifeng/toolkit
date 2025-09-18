@@ -68,8 +68,13 @@ def run_screenshot_tool(args):
         # Run TUI interface
         try:
             from tools.screenshot.tui import main as tui_main
+            # Save original argv and restore later
+            original_argv = sys.argv[:]
             sys.argv = ["screenshot_tui"] + args[1:]
-            tui_main()
+            try:
+                tui_main()
+            finally:
+                sys.argv = original_argv
         except ImportError as e:
             print(f"Error: Could not import TUI dependencies: {e}")
             print("Try installing dependencies with: pip install textual")
@@ -77,8 +82,13 @@ def run_screenshot_tool(args):
     else:
         # Run CLI interface
         from tools.screenshot.organizer import main as cli_main
+        # Save original argv and restore later
+        original_argv = sys.argv[:]
         sys.argv = ["screenshot_organizer"] + (args or [])
-        cli_main()
+        try:
+            cli_main()
+        finally:
+            sys.argv = original_argv
 
 
 def run_image_tool(args):
